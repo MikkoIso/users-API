@@ -1,8 +1,11 @@
-const env = require("dotenv").config();
-const Pool = require("pg").Pool;
+import "dotenv/config";
+import pkg from "pg";
+
+const { Pool } = pkg;
+//const Pool = require("pg").Pool;
 const pool = new Pool({ connectionString: process.env.DB_CONNECTIONSTRING });
 
-const getUsers = (request, response) => {
+export const getUsers = (request, response) => {
   pool.query("SELECT * FROM users ORDER BY id ASC", (error, results) => {
     if (error) {
       throw error;
@@ -11,7 +14,7 @@ const getUsers = (request, response) => {
   });
 };
 
-const getUserById = (request, response) => {
+export const getUsersById = (request, response) => {
   const id = parseInt(request.params.id);
 
   pool.query("SELECT * FROM users WHERE id = $1", [id], (error, results) => {
@@ -22,7 +25,7 @@ const getUserById = (request, response) => {
   });
 };
 
-const createUser = (request, response) => {
+export const createUser = (request, response) => {
   const { name, email } = request.body;
 
   pool.query(
@@ -37,7 +40,7 @@ const createUser = (request, response) => {
   );
 };
 
-const updateUser = (request, response) => {
+export const updateUser = (request, response) => {
   const id = parseInt(request.params.id);
   const { name, email } = request.body;
 
@@ -53,7 +56,7 @@ const updateUser = (request, response) => {
   );
 };
 
-const deleteUser = (request, response) => {
+export const deleteUser = (request, response) => {
   const id = parseInt(request.params.id);
 
   pool.query("DELETE FROM users WHERE id = $1", [id], (error, results) => {
@@ -62,12 +65,4 @@ const deleteUser = (request, response) => {
     }
     response.status(200).send(`User deleted with ID: ${id}`);
   });
-};
-
-module.exports = {
-  getUsers,
-  getUserById,
-  createUser,
-  updateUser,
-  deleteUser,
 };

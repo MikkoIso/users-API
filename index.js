@@ -1,6 +1,12 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const db = require("./queries");
+import express from "express";
+import bodyParser from "body-parser";
+import {
+  getUsers,
+  getUsersById,
+  createUser,
+  updateUser,
+  deleteUser,
+} from "./queries.js";
 const app = express();
 const port = 3000;
 
@@ -15,11 +21,11 @@ app.get("/", (request, response) => {
   response.json({ info: "Node.js, Express, and Postgres API" });
 });
 
-app.get("/users", db.getUsers);
-app.get("/users/:id", db.getUserById);
-app.post("/users", db.createUser);
-app.put("/users/:id", db.updateUser);
-app.delete("/users/:id", db.deleteUser);
+app.get("/users", getUsers);
+app.get("/users/:id", getUsersById);
+app.post("/users", createUser);
+app.put("/users/:id", updateUser);
+app.delete("/users/:id", deleteUser);
 
 app.listen(port, () => {
   console.log(`App running on port ${port}.`);
